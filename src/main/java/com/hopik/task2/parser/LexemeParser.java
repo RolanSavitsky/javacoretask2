@@ -3,41 +3,30 @@ package com.hopik.task2.parser;
 import com.hopik.task2.entity.TextComponent;
 import com.hopik.task2.entity.TextComponentType;
 import com.hopik.task2.entity.TextComposite;
+import com.hopik.task2.exception.TextParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LexemeParser implements ParserHandler{
+public class LexemeParser extends AbstractParser {
     private static final Logger logger = LogManager.getLogger();
-    private static final String LEXEME_SPLITTER_REGEX = "\\s+";
-    private ParserHandler next;
 
     @Override
-    public void setNext(ParserHandler next) {
-        this.next = next;
-    }
-
-    @Override
-    public void parse(TextComponent component, String data) {
-        if (data == null || data.trim().isEmpty()){
-            logger.warn("Empty or null data for LexemeParser");
-            return;
+    public void parse(TextComponent component, String sentence) {
+        if (sentence == null) {
+            throw new TextParseException("Sentence is null");
         }
 
-        String[] lexemes = data.split(LEXEME_SPLITTER_REGEX);
+        String[] lexemes = sentence.split(LEXEME_SPLITTER_REGEX);
 
         for (String lexeme : lexemes){
-            if (lexeme.trim().isEmpty()){
-                continue;
-            }
-
             TextComponent lexemeComponent = new TextComposite(TextComponentType.LEXEME);
             component.add(lexemeComponent);
 
             if (next != null){
-                next.parse(lexemeComponent, lexeme);
+                next.parse(lexemeComponent, lexeme.strip());
             }
-
-            logger.info("LexemeParser: created {} lexemes", lexemes.length);
         }
+
+        logger.info("LexemeParser: created {} lexemes", lexemes.length);
     }
 }

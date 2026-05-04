@@ -2,29 +2,23 @@ package com.hopik.task2.parser;
 
 import com.hopik.task2.entity.Letter;
 import com.hopik.task2.entity.TextComponent;
+import com.hopik.task2.exception.TextParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class SymbolParser implements ParserHandler {
+public class SymbolParser extends AbstractParser {
     private static final Logger logger = LogManager.getLogger();
-    private ParserHandler next;
 
     @Override
-    public void setNext(ParserHandler next) {
-        this.next = next;
-    }
-
-    @Override
-    public void parse(TextComponent component, String data) {
-        if (data == null || data.isEmpty()) {
-            logger.warn("Empty or null data for SymbolParser");
-            return;
+    public void parse(TextComponent component, String word) {
+        if (word == null) {
+            throw new TextParseException("Word is null");
         }
 
-        for (char symbol : data.toCharArray()) {
+        for (char symbol : word.toCharArray()) {
             component.add(new Letter(symbol));
         }
 
-        logger.trace("SymbolParser: created {} letters", data.length());
+        logger.info("SymbolParser: created {} letters", word.length());
     }
 }

@@ -1,23 +1,35 @@
 package com.hopik.task2.entity;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.List;
 
-public class Letter implements TextComponent{
-    private final static Logger logger = LogManager.getLogger();
-    private char letter;
+public class Letter implements TextComponent {
+    private final char letter;
 
-    public Letter(char letter){
+    public Letter(char letter) {
         this.letter = letter;
+    }
+
+    public char getValue(){
+        return letter;
     }
 
     @Override
     public void add(TextComponent component) {
-        logger.warn("Skipped attempt to add component to leaf element");
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void remove(TextComponent component) {
-        logger.warn("Skipped attempt to remove component from leaf element");
+    public List<TextComponent> getChildren(){
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public TextComponentType getType() {
+        return TextComponentType.LETTER;
+    }
+
+    @Override
+    public String build() {
+        return String.valueOf(letter);
     }
 }
