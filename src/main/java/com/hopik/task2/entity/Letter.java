@@ -1,5 +1,7 @@
 package com.hopik.task2.entity;
 
+import com.hopik.task2.exception.TextParseException;
+
 import java.util.List;
 
 public class Letter implements TextComponent {
@@ -15,12 +17,12 @@ public class Letter implements TextComponent {
 
     @Override
     public void add(TextComponent component) {
-        throw new UnsupportedOperationException();
+        throw new TextParseException("Letter cant have children");
     }
 
     @Override
     public List<TextComponent> getChildren(){
-        throw new UnsupportedOperationException();
+        throw new TextParseException("Letter cant have children");
     }
 
     @Override
